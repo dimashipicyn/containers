@@ -54,9 +54,8 @@ public:
         data_ = alloc_.allocate(v.size() + 1);
         size_ = v.size();
         capacity_ = v.size() + 1;
-        for (size_type i = 0; i < v.size(); ++i) {
-            data_[i] = v.data_[i];
-        }
+
+        std::memcpy(data_, v.data_, size_ * sizeof(T));
     }
 
     ~vector() {
@@ -70,10 +69,25 @@ public:
         return capacity_;
     }
 
-    reference at(size_type index) const {
+    reference at(size_type index) {
         if (index >= size_) {
             throw std::out_of_range("ft::vector out of range." );
         }
+        return data_[index];
+    }
+
+    const_reference at(size_type index) const {
+        if (index >= size_) {
+            throw std::out_of_range("ft::vector out of range." );
+        }
+        return data_[index];
+    }
+
+    reference operator[](size_type index) {
+        return data_[index];
+    }
+
+    const_reference operator[](size_type index) const {
         return data_[index];
     }
 

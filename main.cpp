@@ -26,7 +26,7 @@ TEST(ft_vector_test, testConstrCopy)
 {
     ft::vector<int> vt(5, 443);
     ft::vector<int> v(vt);
-    
+
     ASSERT_TRUE(v.size() == 5);
     ASSERT_TRUE(v.capacity() == 6);
     ASSERT_TRUE(v.at(0) == 443);
@@ -36,6 +36,31 @@ TEST(ft_vector_test, testConstrCopy)
     ASSERT_TRUE(v.at(4) == 443);
 }
 
+TEST(ft_vector_test, testAt)
+{
+    ft::vector<int> v(5, 443);
+
+    ASSERT_TRUE(v.at(0) == 443);
+    ASSERT_TRUE(v.at(1) == 443);
+    ASSERT_TRUE(v.at(2) == 443);
+    ASSERT_TRUE(v.at(3) == 443);
+    ASSERT_TRUE(v.at(4) == 443);
+
+    ASSERT_THROW(v.at(-1), std::out_of_range);
+    ASSERT_THROW(v.at(5), std::out_of_range);
+    ASSERT_THROW(v.at(5555), std::out_of_range);
+}
+
+TEST(ft_vector_test, testOperatorIndex)
+{
+    ft::vector<int> v(5, 443);
+
+    ASSERT_TRUE(v[0] == 443);
+    ASSERT_TRUE(v[1] == 443);
+    ASSERT_TRUE(v[2] == 443);
+    ASSERT_TRUE(v[3] == 443);
+    ASSERT_TRUE(v[4] == 443);
+}
 
 int main(int argc, char** argv)
 {
