@@ -62,36 +62,51 @@ TEST(ft_vector_test, testOperatorIndex)
     ASSERT_TRUE(v[4] == 443);
 }
 
+TEST(ft_vector_test, testOperatorAssign)
+{
+    ft::vector<int> vt(5, 443);
+    ft::vector<int> v;
+    v = vt;
+    v = v;
+
+    ASSERT_TRUE(v[0] == 443);
+    ASSERT_TRUE(v[1] == 443);
+    ASSERT_TRUE(v[2] == 443);
+    ASSERT_TRUE(v[3] == 443);
+    ASSERT_TRUE(v[4] == 443);
+    ASSERT_TRUE(v.size() == vt.size());
+    ASSERT_TRUE(v.capacity() == vt.capacity());
+}
+
+TEST(ft_vector_test, testResize)
+{
+    ft::vector<int> v;
+
+    // set some initial content:
+    for (int i = 1; i < 10; i++)
+        v.push_back(i);
+
+    v.resize(5);
+    v.resize(8, 100);
+    v.resize(12);
+
+    ASSERT_TRUE(v[0] == 1);
+    ASSERT_TRUE(v[1] == 2);
+    ASSERT_TRUE(v[2] == 3);
+    ASSERT_TRUE(v[3] == 4);
+    ASSERT_TRUE(v[4] == 5);
+    ASSERT_TRUE(v[5] == 100);
+    ASSERT_TRUE(v[6] == 100);
+    ASSERT_TRUE(v[7] == 100);
+    ASSERT_TRUE(v[8] == 0);
+    ASSERT_TRUE(v[9] == 0);
+    ASSERT_TRUE(v[10] == 0);
+    ASSERT_TRUE(v[11] == 0);
+    ASSERT_TRUE(v.size() == 12);
+}
+
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
-    //std::cout << "Hello, world!\n";
-    /*
-    char s[100];
-
-    scanf("%s", s);
-
-    size_t len = strlen(s);
-    for (size_t i = 0; i < len; ++i) {
-        printf("s index = %u; val = %d\n", i, (unsigned char)s[i]);
-    }
-
-    int isPalindrome = 1;
-    for (size_t i = 0; i < len / 2; ++i) {
-        unsigned char first = (unsigned char)s[i];
-        unsigned char second = (unsigned char)s[len - 1 - i];
-        if (first != second) {
-            isPalindrome = 0;
-            break;
-        }
-    }
-
-    if (isPalindrome) {
-        printf("Palindrom!\n");
-    }
-    else {
-        printf("No palindrom!\n");
-    }
-    */
 }

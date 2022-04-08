@@ -58,6 +58,17 @@ public:
         std::memcpy(data_, v.data_, size_ * sizeof(T));
     }
 
+    vector& operator=(vector v) {
+        swap(*this, v);
+        return *this;
+    }
+
+    friend void swap(vector& v1, vector& v2) {
+        std::swap(v1.data_, v2.data_);
+        std::swap(v1.size_, v2.size_);
+        std::swap(v1.capacity_, v2.capacity_);
+    }
+
     ~vector() {
         alloc_.deallocate(data_, capacity_);
     }
@@ -65,8 +76,28 @@ public:
     size_type size() const {
         return size_;
     }
+
     size_type capacity() const {
         return capacity_;
+    }
+
+    size_type max_size() const {
+        return 1073741823;
+    }
+
+    bool empty() const {
+        return size_ == 0;
+    }
+
+    void resize(size_type n, value_type val = value_type()) {
+        if (n >= capacity_) {
+            realloc(n + 1);
+        }
+        for (size_type i = size_; i < n; ++i)
+        {
+            data_[i] = val;
+        }
+        size_ = n;
     }
 
     reference at(size_type index) {
@@ -92,22 +123,23 @@ public:
     }
 
     void push_back(const_reference value) {
-        realloc();
+        if (size_ >= capacity_) {
+            realloc(capacity_ * 2);
+        }
         data_[size_++] = value;
     }
 
 private:
-    void realloc() {
-        if (size_ == capacity_) {
-            T* n_data = alloc_.allocate(capacity_ * 2);
-            if (n_data == nullptr) {
-                throw std::bad_alloc();
-            }
-            std::memcpy(n_data, data_, size_ * sizeof(T));
-            alloc.deallocate(data_, capacity_);
-            data_ = n_data;
-            capacity_ *= 2;
+    void realloc(size_type size) {
+        T *n_data = alloc_.allocate(size);
+        if (n_data == nullptr)
+        {
+            throw std::bad_alloc();
         }
+        std::memcpy(n_data, data_, size_ * sizeof(T));
+        alloc_.deallocate(data_, capacity_);
+        data_ = n_data;
+        capacity_ = size;
     }
 
 private:
