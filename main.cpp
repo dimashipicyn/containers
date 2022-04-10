@@ -281,6 +281,22 @@ TEST(ft_vector_test, testTypes)
     ft::vector<std::reference_wrapper<const int>> criv;
 }
 
+TEST(ft_vector_test, testIterator)
+{
+    ft::vector<int> v;
+    for (size_t i = 10; i > 0; i--)
+    {
+        v.push_back(i);
+    }
+    size_t c = 10;
+    for (ft::vector<int>::iterator i = v.begin(); i < v.end(); i++, c--)
+    {
+        ASSERT_TRUE(*i == c);
+    }
+    //std::sort(v.begin(), v.end());
+    std::iterator_traits<ft::vector_iterator<int>>::value_type;
+}
+
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

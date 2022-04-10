@@ -23,49 +23,171 @@ namespace ft {
     struct bidirectional_iterator_tag : public forward_iterator_tag { };
     struct random_access_iterator_tag : public bidirectional_iterator_tag { };
 
+    template<class T>
+    struct iterator_traits
+    {
+        typedef typename T::iterator_category      iterator_category;
+        typedef typename T::value_type             value_type;
+        typedef typename T::difference_type        difference_type;
+        typedef          difference_type                            distance_type;
+        typedef typename T::pointer                pointer;
+        typedef typename T::reference              reference;
+    };
+
+    template<class T>
+    struct iterator_traits<T*>
+    {
+        typedef typename T::iterator_category      iterator_category;
+        typedef typename T::value_type             value_type;
+        typedef typename T::difference_type        difference_type;
+        typedef          difference_type                            distance_type;
+        typedef typename T::pointer                pointer;
+        typedef typename T::reference              reference;
+    };
+
+
     template <class T>
     class vector_iterator : public iterator<random_access_iterator_tag, T>
     {
     public:
-        typedef typename iterator<random_access_iterator_tag, T>::pointer               pointer;
-        typedef typename iterator<random_access_iterator_tag, T>::value_type            value_type;
-        typedef typename iterator<random_access_iterator_tag, T>::difference_type       difference_type;
-        typedef typename iterator<random_access_iterator_tag, T>::reference             reference;
-        typedef typename iterator<random_access_iterator_tag, T>::iterator_category     iterator_category;
+        // typedef typename iterator<random_access_iterator_tag, T>::pointer               pointer;
+        // typedef typename iterator<random_access_iterator_tag, T>::value_type            value_type;
+        // typedef typename iterator<random_access_iterator_tag, T>::difference_type       difference_type;
+        // typedef typename iterator<random_access_iterator_tag, T>::reference             reference;
+        // typedef typename iterator<random_access_iterator_tag, T>::iterator_category     iterator_category;
+        typedef T value_type;
+        typedef T* pointer;
+        typedef std::ptrdiff_t difference_type;
+        typedef T& reference;
+        typedef          size_t                                                         size_type;
 
         explicit vector_iterator(pointer c)
-            : owner_(c)
+            : owner_data_(c)
         {
         }
+
         ~vector_iterator()
         {
         }
-        pointer owner_;
-    };
 
-    template<class T>
-    struct iterator_traits
-    {
-        typedef typename vector_iterator<T>::iterator_category      iterator_category;
-        typedef typename vector_iterator<T>::value_type             value_type;
-        typedef typename vector_iterator<T>::difference_type        difference_type;
-        typedef          difference_type                            distance_type;
-        typedef typename vector_iterator<T>::pointer                pointer;
-        typedef typename vector_iterator<T>::reference              reference;
+        vector_iterator(const vector_iterator& it)
+            : owner_data_(it.owner_data_)
+        {
+
+        }
+
+        vector_iterator& operator=(vector_iterator it) {
+            std::swap(owner_data_, it.owner_data_);
+            return *this;
+        }
+
+        bool operator==(const vector_iterator& it) const {
+            return owner_data_ == it.owner_data_;
+        }
+
+        bool operator!=(const vector_iterator& it) const {
+            return !operator==(it);
+        }
+
+        bool operator<(const vector_iterator& it) const {
+            return owner_data_ < it.owner_data_;
+        }
+
+        bool operator>(const vector_iterator& it) const {
+            return owner_data_ > it.owner_data_;
+        }
+
+        bool operator<=(const vector_iterator& it) const {
+            return owner_data_ <= it.owner_data_;
+        }
+
+        bool operator>=(const vector_iterator& it) const {
+            return owner_data_ >= it.owner_data_;
+        }
+
+        vector_iterator& operator++() {
+            ++owner_data_;
+            return *this;
+        }
+
+        vector_iterator operator++(int) {
+            vector_iterator<T> tmp(*this);
+            owner_data_++;
+            return tmp;
+        }
+
+        vector_iterator& operator--() {
+            --owner_data_;
+            return *this;
+        }
+
+        vector_iterator operator--(int) {
+            vector_iterator<T> tmp(*this);
+            owner_data_--;
+            return tmp;
+        }
+
+        vector_iterator& operator+=(size_type n) {
+            owner_data_ += n;
+            return *this;
+        }
+
+        vector_iterator operator+(size_type n) const {
+            vector_iterator<T> tmp(*this);
+            tmp += n;
+            return tmp;
+        }
+
+        friend vector_iterator operator+(size_type n, const vector_iterator& it) {
+            vector_iterator<T> tmp(it);
+            tmp += n;
+            return tmp;
+        }
+
+        vector_iterator& operator-=(size_type n) {
+            owner_data_ -= n;
+            return *this;
+        }
+
+        vector_iterator operator-(size_type n) const {
+            vector_iterator<T> tmp(*this);
+            tmp -= n;
+            return tmp;
+        }
+
+        difference_type operator-(const vector_iterator& it) const {
+            return owner_data_ - it.owner_data_;
+        }
+
+        reference operator*() const {
+            return *owner_data_;
+        }
+
+        pointer operator->() const {
+            return owner_data_;
+        }
+
+        reference operator[](size_type n) const {
+            return owner_data_[n];
+        }
+    
+    private:
+        pointer owner_data_;
     };
 
     template <class T, class Allocator = std::allocator<T>>
     class vector
     {
     public:
-        typedef T                       value_type;
-        typedef Allocator               allocator_type;
-        typedef size_t                  size_type;
-        typedef std::ptrdiff_t          difference_type;
-        typedef T&                      reference;
-        typedef const T&                const_reference;
-        typedef T*                      pointer;
-        typedef const T*                const_pointer;
+        typedef T                           value_type;
+        typedef Allocator                   allocator_type;
+        typedef size_t                      size_type;
+        typedef std::ptrdiff_t              difference_type;
+        typedef T&                          reference;
+        typedef const T&                    const_reference;
+        typedef T*                          pointer;
+        typedef const T*                    const_pointer;
+        typedef vector_iterator<T>          iterator;
 
         explicit vector(const allocator_type &alloc = allocator_type())
             : data_(nullptr), size_(0), capacity_(0), alloc_(alloc)
@@ -250,6 +372,14 @@ namespace ft {
         allocator_type get_allocator() const
         {
             return alloc_;
+        }
+
+        iterator begin() {
+            return iterator(data_);
+        }
+
+        iterator end() {
+            return iterator(data_ + size_);
         }
 
     private:
