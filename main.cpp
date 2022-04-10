@@ -105,6 +105,182 @@ TEST(ft_vector_test, testResize)
     ASSERT_TRUE(v.size() == 12);
 }
 
+TEST(ft_vector_test, testReserve)
+{
+    ft::vector<int> v;
+
+    v.reserve(5);
+
+    // set some initial content:
+    for (int i = 0; i < 5; i++)
+        v.push_back(i);
+        
+    ASSERT_TRUE(v.capacity() == 5);
+    ASSERT_TRUE(v[0] == 0);
+    ASSERT_TRUE(v[1] == 1);
+    ASSERT_TRUE(v[2] == 2);
+    ASSERT_TRUE(v[3] == 3);
+    ASSERT_TRUE(v[4] == 4);
+    ASSERT_TRUE(v.size() == 5);
+    ASSERT_TRUE(v.capacity() == 5);
+}
+
+TEST(ft_vector_test, testShrinkToFit)
+{
+    ft::vector<int> v;
+
+    v.reserve(12);
+
+    // set some initial content:
+    for (int i = 0; i < 5; i++)
+        v.push_back(i);
+    
+    ASSERT_TRUE(v.capacity() == 12);
+    v.shrink_to_fit();
+    ASSERT_TRUE(v.capacity() == 6);
+}
+
+TEST(ft_vector_test, testFrontBack)
+{
+    ft::vector<int> v;
+
+    v.push_back(111);
+    v.push_back(222);
+
+    ASSERT_TRUE(v.front() == 111);
+    ASSERT_TRUE(v.back() == 222);
+}
+
+TEST(ft_vector_test, testPushback)
+{
+    ft::vector<int> v;
+    
+    v.push_back(111);
+    v.push_back(222);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
+    v.push_back(6);
+
+    ASSERT_TRUE(v[0] == 111);
+    ASSERT_TRUE(v[1] == 222);
+    ASSERT_TRUE(v[2] == 3);
+    ASSERT_TRUE(v[3] == 4);
+    ASSERT_TRUE(v[4] == 5);
+    ASSERT_TRUE(v[5] == 6);
+}
+
+TEST(ft_vector_test, testPopback)
+{
+    ft::vector<int> v;
+    
+    v.push_back(111);
+    v.push_back(222);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
+    v.push_back(6);
+
+    ASSERT_TRUE(v.size() == 6);
+    v.pop_back();
+    v.pop_back();
+    ASSERT_TRUE(v.size() == 4);
+}
+
+TEST(ft_vector_test, testSwap)
+{
+    ft::vector<int> v;
+    ft::vector<int> vw;
+
+    for (size_t i = 0; i < 5; i++)
+    {
+        v.push_back(i);
+        vw.push_back(4 - i);
+    }
+    
+    v.swap(vw);
+
+    ASSERT_TRUE(v[0] == 4);
+    ASSERT_TRUE(v[1] == 3);
+    ASSERT_TRUE(v[2] == 2);
+    ASSERT_TRUE(v[3] == 1);
+    ASSERT_TRUE(v[4] == 0);
+
+    ASSERT_TRUE(vw[0] == 0);
+    ASSERT_TRUE(vw[1] == 1);
+    ASSERT_TRUE(vw[2] == 2);
+    ASSERT_TRUE(vw[3] == 3);
+    ASSERT_TRUE(vw[4] == 4);
+}
+
+TEST(ft_vector_test, testClear)
+{
+    ft::vector<int> v;
+    for (size_t i = 0; i < 10; i++)
+    {
+        v.push_back(i);
+    }
+    v.clear();
+    ASSERT_TRUE(v.size() == 0);
+}
+
+TEST(ft_vector_test, testOpEqual)
+{
+    ft::vector<int> v;
+    ft::vector<int> vw;
+    ft::vector<int> vww;
+    for (size_t i = 0; i < 10; i++)
+    {
+        v.push_back(i);
+        vw.push_back(i);
+        vww.push_back(i - 1);
+    }
+
+
+    ASSERT_TRUE(v == vw);
+    ASSERT_FALSE(v == vww);
+
+    ASSERT_FALSE(v != vw);
+    ASSERT_TRUE(v != vww);
+}
+
+TEST(ft_vector_test, testOpLess)
+{
+    ft::vector<int> v;
+    ft::vector<int> vw;
+    ft::vector<int> vww;
+
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+
+    vw.push_back(1);
+    vw.push_back(2);
+    vw.push_back(4);
+
+    vww.push_back(1);
+    vww.push_back(2);
+    vww.push_back(3);
+
+    ASSERT_TRUE(v < vw);
+    ASSERT_FALSE(v < vww);
+    ASSERT_TRUE(v <= vww);
+    vww.push_back(4);
+    ASSERT_TRUE(v < vww);
+    ASSERT_TRUE(v <= vww);
+}
+
+TEST(ft_vector_test, testTypes)
+{
+    ft::vector<int> iv;
+    ft::vector<const int> civ;
+    ft::vector<int*> piv;
+    ft::vector<const int*> cpiv;
+    ft::vector<int const*> pciv;
+    ft::vector<std::reference_wrapper<int>> riv;
+    ft::vector<std::reference_wrapper<const int>> criv;
+}
+
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

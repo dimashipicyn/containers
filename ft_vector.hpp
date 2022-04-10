@@ -2,11 +2,30 @@
 #define FT_VECTOR_H
 
 #include <memory>
+#include <iterator>
 
 namespace ft {
 
+template<class T>
+class iterator : public std::iterator {
+public:
+    typedef T*      pointer;
+
+    explicit iterator(pointer c)
+        : owner_(c)
+    {
+
+    }
+    ~iterator() {
+
+    }
+    pointer owner_;
+};
+
+
 template<class T, class Allocator = std::allocator<T>>
 class vector {
+    friend void swap(vector<T, Allocator>& x, vector<T, Allocator>& y);
 public:
     typedef T               value_type;
     typedef Allocator       allocator_type;
@@ -59,14 +78,14 @@ public:
     }
 
     vector& operator=(vector v) {
-        swap(*this, v);
+        swap(v);
         return *this;
     }
 
-    friend void swap(vector& v1, vector& v2) {
-        std::swap(v1.data_, v2.data_);
-        std::swap(v1.size_, v2.size_);
-        std::swap(v1.capacity_, v2.capacity_);
+    void swap(vector& v) {
+        std::swap(data_, v.data_);
+        std::swap(size_, v.size_);
+        std::swap(capacity_, v.capacity_);
     }
 
     ~vector() {
@@ -100,6 +119,18 @@ public:
         size_ = n;
     }
 
+    void reserve(size_type n) {
+        if (n >= capacity_) {
+            realloc(n);
+        }
+    }
+
+    void shrink_to_fit() {
+        if (size_ < (capacity_ / 2)) {
+            realloc(size_ + 1);
+        }
+    }
+
     reference at(size_type index) {
         if (index >= size_) {
             throw std::out_of_range("ft::vector out of range." );
@@ -122,11 +153,52 @@ public:
         return data_[index];
     }
 
+    reference front() {
+        return *data_;
+    }
+
+    const_reference front() const {
+        return *data_;
+    }
+
+    reference back() {
+        return data_[size_ - 1];
+    }
+
+    const_reference back() const {
+        return data_[size_ - 1];
+    }
+
+    value_type* data() {
+        return data_;
+    }
+
+    const value_type* data() const {
+        return data_;
+    }
+
     void push_back(const_reference value) {
         if (size_ >= capacity_) {
             realloc(capacity_ * 2);
         }
         data_[size_++] = value;
+    }
+
+    void pop_back() {
+        --size_;
+        data_[size_].~value_type();
+    }
+
+    void clear() {
+        for (size_t i = 0; i < size_; i++)
+        {
+            data_[i].~value_type();
+        }
+        size_ = 0;
+    }
+
+    allocator_type get_allocator() const {
+        return alloc_;
     }
 
 private:
@@ -143,11 +215,77 @@ private:
     }
 
 private:
-    T* data_;
-    size_t size_;
-    size_t capacity_;
+    pointer data_;
+    size_type size_;
+    size_type capacity_;
     Allocator alloc_;
 };
+
+template <class T, class Alloc>
+void swap(vector<T, Alloc> &v1, vector<T, Alloc> &v2)
+{
+    v1.swap(v2);
+}
+
+template <class T, class Alloc>
+bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+    if (lhs.size() != rhs.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < lhs.size(); i++)
+    {
+        if (lhs[i] != rhs[i]) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+template <class T, class Alloc>
+bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+    return !operator==(lhs, rhs);
+}
+
+template <class T, class Alloc>
+bool operator< (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+    size_t i = 0;
+    for (; i < lhs.size(); i++)
+    {
+        if (i == rhs.size() || rhs[i] < lhs[i]) {
+            return false;
+        }
+        else if (lhs[i] < rhs[i]) {
+            return true;
+        }
+    }
+    return i != rhs.size();
+}
+
+template <class T, class Alloc>
+bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+    size_t i = 0;
+    for (; i < lhs.size(); i++)
+    {
+        if (i == rhs.size() || rhs[i] < lhs[i]) {
+            return false;
+        }
+        else if (lhs[i] <= rhs[i]) {
+            return true;
+        }
+    }
+    return i <= rhs.size();
+}
+
+template <class T, class Alloc>
+bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+    return !(operator<(lhs, rhs));
+}
+
+template <class T, class Alloc>
+bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+    return !(operator<=(lhs, rhs));
+}
 
 }
 
