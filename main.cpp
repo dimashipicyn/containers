@@ -272,29 +272,25 @@ TEST(ft_vector_test, testOpLess)
 
 TEST(ft_vector_test, testTypes)
 {
-    ft::vector<int> iv;
-    ft::vector<const int> civ;
-    ft::vector<int*> piv;
-    ft::vector<const int*> cpiv;
-    ft::vector<int const*> pciv;
-    ft::vector<std::reference_wrapper<int>> riv;
-    ft::vector<std::reference_wrapper<const int>> criv;
+    // ft::vector<int> iv;
+    // ft::vector<const int> civ;
+    // ft::vector<int*> piv;
+    // ft::vector<const int*> cpiv;
+    // ft::vector<int const*> pciv;
+    // ft::vector<std::reference_wrapper<int>> riv;
+    // ft::vector<std::reference_wrapper<const int>> criv;
 }
 
+void f(int* a) {
+    std::cout << *a << "\n";
+}
+bool cmp(int* a, int* b) {
+    return *a < *b;
+}
 TEST(ft_vector_test, testIterator)
 {
-    ft::vector<int> v;
-    for (size_t i = 10; i > 0; i--)
-    {
-        v.push_back(i);
-    }
-    size_t c = 10;
-    for (ft::vector<int>::iterator i = v.begin(); i < v.end(); i++, c--)
-    {
-        ASSERT_TRUE(*i == c);
-    }
-    //std::sort(v.begin(), v.end());
-    std::iterator_traits<ft::vector_iterator<int>>::value_type;
+    ft::iterator_traits<ft::vector_iterator<int*>>::value_type a = 0;
+    ft::iterator_traits<int*>::value_type b = 0;
 }
 
 int main(int argc, char** argv)

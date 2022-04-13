@@ -6,30 +6,13 @@
 
 namespace ft {
 
-    template <typename _Category, typename _Tp, typename _Distance = ptrdiff_t,
-              typename _Pointer = _Tp *, typename _Reference = _Tp &>
-    struct iterator
-    {
-        typedef _Category iterator_category;
-        typedef _Tp value_type;
-        typedef _Distance difference_type;
-        typedef _Pointer pointer;
-        typedef _Reference reference;
-    };
-
-    struct input_iterator_tag { };
-    struct output_iterator_tag { };
-    struct forward_iterator_tag : public input_iterator_tag { };
-    struct bidirectional_iterator_tag : public forward_iterator_tag { };
-    struct random_access_iterator_tag : public bidirectional_iterator_tag { };
-
     template<class T>
     struct iterator_traits
     {
         typedef typename T::iterator_category      iterator_category;
         typedef typename T::value_type             value_type;
         typedef typename T::difference_type        difference_type;
-        typedef          difference_type                            distance_type;
+        typedef typename T::difference_type        distance_type;
         typedef typename T::pointer                pointer;
         typedef typename T::reference              reference;
     };
@@ -37,29 +20,33 @@ namespace ft {
     template<class T>
     struct iterator_traits<T*>
     {
-        typedef typename T::iterator_category      iterator_category;
-        typedef typename T::value_type             value_type;
-        typedef typename T::difference_type        difference_type;
-        typedef          difference_type                            distance_type;
-        typedef typename T::pointer                pointer;
-        typedef typename T::reference              reference;
+        typedef T                                   value_type;
+        typedef T*                                  pointer;
+        typedef std::ptrdiff_t                      difference_type;
+        typedef T&                                  reference;
+        typedef size_t                              size_type;
     };
 
+    template<class T>
+    struct iterator_traits<const T*>
+    {
+        typedef const T                             value_type;
+        typedef const T*                            pointer;
+        typedef std::ptrdiff_t                      difference_type;
+        typedef const T&                            reference;
+        typedef size_t                              size_type;
+    };
 
     template <class T>
-    class vector_iterator : public iterator<random_access_iterator_tag, T>
+    class vector_iterator
     {
     public:
-        // typedef typename iterator<random_access_iterator_tag, T>::pointer               pointer;
-        // typedef typename iterator<random_access_iterator_tag, T>::value_type            value_type;
-        // typedef typename iterator<random_access_iterator_tag, T>::difference_type       difference_type;
-        // typedef typename iterator<random_access_iterator_tag, T>::reference             reference;
-        // typedef typename iterator<random_access_iterator_tag, T>::iterator_category     iterator_category;
-        typedef T value_type;
-        typedef T* pointer;
-        typedef std::ptrdiff_t difference_type;
-        typedef T& reference;
-        typedef          size_t                                                         size_type;
+        typedef std::random_access_iterator_tag     iterator_category;
+        typedef T                                   value_type;
+        typedef T*                                  pointer;
+        typedef std::ptrdiff_t                      difference_type;
+        typedef T&                                  reference;
+        typedef size_t                              size_type;
 
         explicit vector_iterator(pointer c)
             : owner_data_(c)
