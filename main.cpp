@@ -289,8 +289,371 @@ bool cmp(int* a, int* b) {
 }
 TEST(ft_vector_test, testIterator)
 {
-    ft::iterator_traits<ft::vector_iterator<int*>>::value_type a = 0;
-    ft::iterator_traits<int*>::value_type b = 0;
+
+}
+
+TEST(ft_vector_test, testInsert1_1) {
+    ft::vector<std::string> v;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin(), "petuh");
+
+    ASSERT_TRUE(*pos == "petuh");
+    
+    ASSERT_TRUE(v[0] == "petuh");
+    ASSERT_TRUE(v[1] == "hello");
+    ASSERT_TRUE(v[2] == "world");
+    ASSERT_TRUE(v[3] == "tester");
+}
+
+TEST(ft_vector_test, testInsert1_2) {
+    ft::vector<std::string> v;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin() + 1, "petuh");
+
+    ASSERT_TRUE(*pos == "petuh");
+    
+    ASSERT_TRUE(v[0] == "hello");
+    ASSERT_TRUE(v[1] == "petuh");
+    ASSERT_TRUE(v[2] == "world");
+    ASSERT_TRUE(v[3] == "tester");
+}
+
+TEST(ft_vector_test, testInsert1_3) {
+    ft::vector<std::string> v;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin() + 2, "petuh");
+
+    ASSERT_TRUE(*pos == "petuh");
+    
+    ASSERT_TRUE(v[0] == "hello");
+    ASSERT_TRUE(v[1] == "world");
+    ASSERT_TRUE(v[2] == "petuh");
+    ASSERT_TRUE(v[3] == "tester");
+}
+
+TEST(ft_vector_test, testInsert1_4) {
+    ft::vector<std::string> v;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin() + 3, "petuh");
+
+    ASSERT_TRUE(*pos == "petuh");
+    
+    ASSERT_TRUE(v[0] == "hello");
+    ASSERT_TRUE(v[1] == "world");
+    ASSERT_TRUE(v[2] == "tester");
+    ASSERT_TRUE(v[3] == "petuh");
+}
+
+TEST(ft_vector_test, testInsert1_5) {
+    ft::vector<std::string> v;
+    ft::vector<std::string> vv;
+
+    ft::vector<std::string>::iterator pos1 = v.insert(v.begin(), "petuh");
+    ft::vector<std::string>::iterator pos2 = vv.insert(vv.end(), "petuh");
+
+    ASSERT_TRUE(*pos1 == "petuh");
+    ASSERT_TRUE(*pos2 == "petuh");
+    
+    ASSERT_TRUE(v[0] == "petuh");
+    ASSERT_TRUE(vv[0] == "petuh");
+}
+
+TEST(ft_vector_test, testInsert_2_1) {
+    ft::vector<std::string> v;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin(), 3, "petuh");
+
+    ASSERT_TRUE(*pos == "petuh");
+    ASSERT_TRUE(*(pos+1) == "petuh");
+    ASSERT_TRUE(*(pos+2) == "petuh");
+    
+    ASSERT_TRUE(v[0] == "petuh");
+    ASSERT_TRUE(v[1] == "petuh");
+    ASSERT_TRUE(v[2] == "petuh");
+    ASSERT_TRUE(v[3] == "hello");
+    ASSERT_TRUE(v[4] == "world");
+    ASSERT_TRUE(v[5] == "tester");
+}
+
+TEST(ft_vector_test, testInsert2_2) {
+    ft::vector<std::string> v;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin() + 1, 3, "petuh");
+
+    ASSERT_TRUE(*pos == "petuh");
+    ASSERT_TRUE(*(pos+1) == "petuh");
+    ASSERT_TRUE(*(pos+2) == "petuh");
+    
+    ASSERT_TRUE(v[0] == "hello");
+    ASSERT_TRUE(v[1] == "petuh");
+    ASSERT_TRUE(v[2] == "petuh");
+    ASSERT_TRUE(v[3] == "petuh");
+    ASSERT_TRUE(v[4] == "world");
+    ASSERT_TRUE(v[5] == "tester");
+}
+
+TEST(ft_vector_test, testInsert2_3) {
+    ft::vector<std::string> v;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin() + 2, 3, "petuh");
+
+    ASSERT_TRUE(*pos == "petuh");
+    ASSERT_TRUE(*(pos+1) == "petuh");
+    ASSERT_TRUE(*(pos+2) == "petuh");
+    
+    ASSERT_TRUE(v[0] == "hello");
+    ASSERT_TRUE(v[1] == "world");
+    ASSERT_TRUE(v[2] == "petuh");
+    ASSERT_TRUE(v[3] == "petuh");
+    ASSERT_TRUE(v[4] == "petuh");
+    ASSERT_TRUE(v[5] == "tester");
+}
+
+TEST(ft_vector_test, testInsert2_4) {
+    ft::vector<std::string> v;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin() + 3, 3, "petuh");
+
+    ASSERT_TRUE(*pos == "petuh");
+    ASSERT_TRUE(*(pos+1) == "petuh");
+    ASSERT_TRUE(*(pos+2) == "petuh");
+    
+    ASSERT_TRUE(v[0] == "hello");
+    ASSERT_TRUE(v[1] == "world");
+    ASSERT_TRUE(v[2] == "tester");
+    ASSERT_TRUE(v[3] == "petuh");
+    ASSERT_TRUE(v[4] == "petuh");
+    ASSERT_TRUE(v[5] == "petuh");
+}
+
+TEST(ft_vector_test, testInsert2_5) {
+    ft::vector<std::string> v;
+    ft::vector<std::string> vv;
+
+    ft::vector<std::string>::iterator pos1 = v.insert(v.begin(), 3, "petuh");
+    ft::vector<std::string>::iterator pos2 = vv.insert(vv.end(), 3, "petuh");
+
+    ASSERT_TRUE(*pos1 == "petuh");
+    ASSERT_TRUE(*(pos1+1) == "petuh");
+    ASSERT_TRUE(*(pos1+2) == "petuh");
+    
+    ASSERT_TRUE(*pos2 == "petuh");
+    ASSERT_TRUE(*(pos2+1) == "petuh");
+    ASSERT_TRUE(*(pos2+2) == "petuh");
+    
+    ASSERT_TRUE(v[0] == "petuh");
+    ASSERT_TRUE(v[1] == "petuh");
+    ASSERT_TRUE(v[2] == "petuh");
+    
+    ASSERT_TRUE(vv[0] == "petuh");
+    ASSERT_TRUE(vv[1] == "petuh");
+    ASSERT_TRUE(vv[2] == "petuh");
+}
+
+TEST(ft_vector_test, testInsert_3_1) {
+    ft::vector<std::string> v;
+    ft::vector<std::string> vw;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+    
+    vw.push_back("petuh");
+    vw.push_back("user");
+    vw.push_back("loh");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin(), vw.begin(), vw.end());
+
+    ASSERT_TRUE(*pos == "petuh");
+    ASSERT_TRUE(*(pos+1) == "user");
+    ASSERT_TRUE(*(pos+2) == "loh");
+    
+    ASSERT_TRUE(v[0] == "petuh");
+    ASSERT_TRUE(v[1] == "user");
+    ASSERT_TRUE(v[2] == "loh");
+    ASSERT_TRUE(v[3] == "hello");
+    ASSERT_TRUE(v[4] == "world");
+    ASSERT_TRUE(v[5] == "tester");
+}
+
+TEST(ft_vector_test, testInsert3_2) {
+    ft::vector<std::string> v;
+    ft::vector<std::string> vw;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+    
+    vw.push_back("petuh");
+    vw.push_back("user");
+    vw.push_back("loh");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin() + 1, vw.begin(), vw.end());
+
+    ASSERT_TRUE(*pos == "petuh");
+    ASSERT_TRUE(*(pos+1) == "user");
+    ASSERT_TRUE(*(pos+2) == "loh");
+    
+    ASSERT_TRUE(v[0] == "hello");
+    ASSERT_TRUE(v[1] == "petuh");
+    ASSERT_TRUE(v[2] == "user");
+    ASSERT_TRUE(v[3] == "loh");
+    ASSERT_TRUE(v[4] == "world");
+    ASSERT_TRUE(v[5] == "tester");
+}
+
+TEST(ft_vector_test, testInsert3_3) {
+    ft::vector<std::string> v;
+    ft::vector<std::string> vw;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+    
+    vw.push_back("petuh");
+    vw.push_back("user");
+    vw.push_back("loh");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin() + 2, vw.begin(), vw.end());
+
+    ASSERT_TRUE(*pos == "petuh");
+    ASSERT_TRUE(*(pos+1) == "user");
+    ASSERT_TRUE(*(pos+2) == "loh");
+    
+    ASSERT_TRUE(v[0] == "hello");
+    ASSERT_TRUE(v[1] == "world");
+    ASSERT_TRUE(v[2] == "petuh");
+    ASSERT_TRUE(v[3] == "user");
+    ASSERT_TRUE(v[4] == "loh");
+    ASSERT_TRUE(v[5] == "tester");
+}
+
+TEST(ft_vector_test, testInsert3_4) {
+    ft::vector<std::string> v;
+    ft::vector<std::string> vw;
+
+    v.push_back("hello");
+    v.push_back("world");
+    v.push_back("tester");
+    
+    vw.push_back("petuh");
+    vw.push_back("user");
+    vw.push_back("loh");
+
+    ft::vector<std::string>::iterator pos = v.insert(v.begin() + 3, vw.begin(), vw.end());
+
+    ASSERT_TRUE(*pos == "petuh");
+    ASSERT_TRUE(*(pos+1) == "user");
+    ASSERT_TRUE(*(pos+2) == "loh");
+    
+    ASSERT_TRUE(v[0] == "hello");
+    ASSERT_TRUE(v[1] == "world");
+    ASSERT_TRUE(v[2] == "tester");
+    ASSERT_TRUE(v[3] == "petuh");
+    ASSERT_TRUE(v[4] == "user");
+    ASSERT_TRUE(v[5] == "loh");
+}
+
+TEST(ft_vector_test, testInsert3_5) {
+    ft::vector<std::string> v;
+    ft::vector<std::string> vv;
+    ft::vector<std::string> vw;
+    
+    vw.push_back("petuh");
+    vw.push_back("user");
+    vw.push_back("loh");
+
+    ft::vector<std::string>::iterator pos1 = v.insert(v.begin(), vw.begin(), vw.end());
+    ft::vector<std::string>::iterator pos2 = vv.insert(vv.end(), vw.begin(), vw.end());
+
+    ASSERT_TRUE(*pos1 == "petuh");
+    ASSERT_TRUE(*(pos1+1) == "user");
+    ASSERT_TRUE(*(pos1+2) == "loh");
+    
+    ASSERT_TRUE(*pos2 == "petuh");
+    ASSERT_TRUE(*(pos2+1) == "user");
+    ASSERT_TRUE(*(pos2+2) == "loh");
+    
+    ASSERT_TRUE(v[0] == "petuh");
+    ASSERT_TRUE(v[1] == "user");
+    ASSERT_TRUE(v[2] == "loh");
+    
+    ASSERT_TRUE(vv[0] == "petuh");
+    ASSERT_TRUE(vv[1] == "user");
+    ASSERT_TRUE(vv[2] == "loh");
+}
+
+TEST(ft_vector_test, TestKek) {
+    ft::vector<std::string> v;
+    v.push_back(std::string("hello"));
+    v.push_back(std::string("world"));
+    v.push_back(std::string("tester"));
+
+    std::vector<std::string> vv;
+
+    vv.insert(vv.end(), v.begin(), v.end());
+    
+    ASSERT_TRUE(vv[0] == "hello");
+    ASSERT_TRUE(vv[1] == "world");
+    ASSERT_TRUE(vv[2] == "tester");
+}
+
+struct a {
+    a() {
+        std::cout << "constr a\n";
+    }
+    ~a() {
+        std::cout << "dest a\n";
+    }
+    a(const a& aa) {
+        std::cout << "copy a\n";
+    }
+    a& operator=(const a& aa) {
+        std::cout << "assign a\n";
+        return *this;
+    }
+};
+
+void ttt() {
+    ft::vector<a> as;
+    as.push_back(a());
+    //as.push_back(a());
+}
+
+TEST(ft_vector_test, lol) {
+    ttt();
 }
 
 int main(int argc, char** argv)

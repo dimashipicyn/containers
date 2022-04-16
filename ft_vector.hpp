@@ -190,9 +190,9 @@ namespace ft {
             capacity_ = n + 1;
             size_ = n;
 
-            for (size_type i = 0; i < size_; ++i)
+            for (size_type i = 0; i < n; i++)
             {
-                data_[i] = val;
+                alloc_.construct(&data_[i], val);
             }
         }
 
@@ -203,7 +203,11 @@ namespace ft {
             size_ = v.size();
             capacity_ = v.size() + 1;
 
-            std::memcpy(data_, v.data_, size_ * sizeof(T));
+           for (size_type i = 0; i < v.size(); i++)
+           {
+               alloc_.construct(&data_[i], v[i]);
+           }
+            
         }
 
         vector& operator=(vector v)
@@ -237,7 +241,7 @@ namespace ft {
 
         size_type max_size() const
         {
-            return 1073741823;
+            return alloc_.max_size();
         }
 
         bool empty() const
@@ -338,7 +342,7 @@ namespace ft {
             {
                 realloc(capacity_ * 2);
             }
-            data_[size_++] = value;
+            alloc_.construct(&data_[size_++], value);
         }
 
         void pop_back()
@@ -349,7 +353,7 @@ namespace ft {
 
         void clear()
         {
-            for (size_t i = 0; i < size_; i++)
+            for (size_type i = 0; i < size_; i++)
             {
                 data_[i].~value_type();
             }
@@ -369,6 +373,77 @@ namespace ft {
             return iterator(data_ + size_);
         }
 
+        iterator insert(iterator pos, const_reference value) {
+
+            size_type idx = pos - begin();
+            
+            if ((size_ +  1) >= capacity_) {
+                realloc(capacity_ * 2);
+            }
+
+            for (size_type i = size_; i > idx; i--)
+            {
+                alloc_.construct(&data_[i], data_[i - 1]);
+            }
+
+            alloc_.construct(&data_[idx], value);
+            ++size_;
+
+            return iterator(&data_[idx]);
+        }
+
+        iterator insert(iterator pos, size_type n, const_reference value) {
+            size_type idx = pos - begin();
+            
+            while ((size_ +  n) >= capacity_) {
+                realloc(capacity_ * 2);
+            }
+
+            for (size_type i = size_ + n - 1; i > idx; i--)
+            {
+                alloc_.construct(&data_[i], data_[i - n]);
+            }
+
+            for (size_type i = idx; i < idx + n; i++)
+            {    
+                alloc_.construct(&data_[i], value);
+            }
+            
+            alloc_.construct(&data_[idx], value);
+            
+            size_ += n;
+
+            return iterator(&data_[idx]);
+        }
+
+        template<class InputIter>
+        iterator insert(iterator pos, InputIter first, InputIter last) {
+            if (first == last) {
+                return pos;
+            }
+
+            typename InputIter::difference_type n = last - first;
+            
+            size_type idx = pos - begin();
+            
+            while ((size_ +  n) >= capacity_) {
+                realloc(capacity_ * 2);
+            }
+
+            for (size_type i = size_ + n - 1; i > idx; i--)
+            {
+                alloc_.construct(&data_[i], data_[i - n]);
+            }
+            
+            for (size_type i = idx; first != last; i++, first++) {
+                alloc_.construct(&data_[i], *first);
+            }
+            
+            size_ += n;
+
+            return iterator(&data_[idx]);
+        }
+
     private:
         void realloc(size_type size)
         {
@@ -377,7 +452,10 @@ namespace ft {
             {
                 throw std::bad_alloc();
             }
-            std::memcpy(n_data, data_, size_ * sizeof(T));
+            for (size_t i = 0; i < size_; i++)
+            {
+                alloc_.construct(&n_data[i], T(data_[i]));
+            }
             alloc_.deallocate(data_, capacity_);
             data_ = n_data;
             capacity_ = size;
