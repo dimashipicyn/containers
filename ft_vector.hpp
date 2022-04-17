@@ -6,6 +6,17 @@
 
 namespace ft {
 
+    template <bool, typename T = void>
+    struct enable_if
+    {
+    };
+
+    template <typename T>
+    struct enable_if<true, T>
+    {
+        typedef T type;
+    };
+
     template<class T>
     struct iterator_traits
     {
@@ -208,6 +219,22 @@ namespace ft {
                alloc_.construct(&data_[i], v[i]);
            }
             
+        }
+
+        template<class InputIter>
+        vector(InputIter first, InputIter last, const allocator_type& alloc = allocator_type(), typename enable_if<true, typename iterator_traits<InputIter>::iterator_category>::type = 0)
+            : data_(nullptr)
+            , size_(0)
+            , capacity_(0)
+            , alloc_(alloc)
+        {
+            typename InputIter::difference_type n = last - first;
+            realloc(n + 1);
+            for (size_t i = 0; i < n; i++, first++)
+            {
+                alloc_.construct(&data_[i], *first);
+            }
+            size_ = n;
         }
 
         vector& operator=(vector v)
