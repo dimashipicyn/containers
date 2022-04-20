@@ -1,4 +1,4 @@
-#include "ft_vector.hpp"
+#include "vector.h"
 #include <iostream>
 
 #include "gtest/gtest.h"
@@ -628,32 +628,6 @@ TEST(ft_vector_test, TestKek) {
     ASSERT_TRUE(vv[0] == "hello");
     ASSERT_TRUE(vv[1] == "world");
     ASSERT_TRUE(vv[2] == "tester");
-}
-
-struct a {
-    a() {
-        std::cout << "constr a\n";
-    }
-    ~a() {
-        std::cout << "dest a\n";
-    }
-    a(const a& aa) {
-        std::cout << "copy a\n";
-    }
-    a& operator=(const a& aa) {
-        std::cout << "assign a\n";
-        return *this;
-    }
-};
-
-void ttt() {
-    ft::vector<a> as;
-    as.push_back(a());
-    //as.push_back(a());
-}
-
-TEST(ft_vector_test, lol) {
-    ttt();
 }
 
 int main(int argc, char** argv)

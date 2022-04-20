@@ -1,52 +1,12 @@
 #ifndef FT_VECTOR_H
 #define FT_VECTOR_H
 
+#include "traits.h"
+
 #include <memory>
 #include <iterator>
 
 namespace ft {
-
-    template <bool, typename T = void>
-    struct enable_if
-    {
-    };
-
-    template <typename T>
-    struct enable_if<true, T>
-    {
-        typedef T type;
-    };
-
-    template<class T>
-    struct iterator_traits
-    {
-        typedef typename T::iterator_category      iterator_category;
-        typedef typename T::value_type             value_type;
-        typedef typename T::difference_type        difference_type;
-        typedef typename T::difference_type        distance_type;
-        typedef typename T::pointer                pointer;
-        typedef typename T::reference              reference;
-    };
-
-    template<class T>
-    struct iterator_traits<T*>
-    {
-        typedef T                                   value_type;
-        typedef T*                                  pointer;
-        typedef std::ptrdiff_t                      difference_type;
-        typedef T&                                  reference;
-        typedef size_t                              size_type;
-    };
-
-    template<class T>
-    struct iterator_traits<const T*>
-    {
-        typedef const T                             value_type;
-        typedef const T*                            pointer;
-        typedef std::ptrdiff_t                      difference_type;
-        typedef const T&                            reference;
-        typedef size_t                              size_type;
-    };
 
     template <class T>
     class vector_iterator
@@ -221,21 +181,25 @@ namespace ft {
             
         }
 
-        template<class InputIter>
-        vector(InputIter first, InputIter last, const allocator_type& alloc = allocator_type(), typename enable_if<true, typename iterator_traits<InputIter>::iterator_category>::type = 0)
-            : data_(nullptr)
-            , size_(0)
-            , capacity_(0)
-            , alloc_(alloc)
-        {
-            typename InputIter::difference_type n = last - first;
-            realloc(n + 1);
-            for (size_t i = 0; i < n; i++, first++)
-            {
-                alloc_.construct(&data_[i], *first);
-            }
-            size_ = n;
-        }
+        // template<class InputIter>
+        // vector(InputIter first, InputIter last, const allocator_type& alloc = allocator_type(), typename enable_if<true, typename iterator_traits<InputIter>::iterator_category>::type = 0)
+        //     : data_(nullptr)
+        //     , size_(0)
+        //     , capacity_(0)
+        //     , alloc_(alloc)
+        // {
+        //     typedef iterator_traits<InputIter> Traits;
+
+        //     typename Traits::difference_type n = ft::distance(first, last);
+        //     assert(n >= 0);
+
+        //     realloc(n + 1);
+        //     for (size_t i = 0; i < n; i++, first++)
+        //     {
+        //         alloc_.construct(&data_[i], *first);
+        //     }
+        //     size_ = n;
+        // }
 
         vector& operator=(vector v)
         {
@@ -353,12 +317,12 @@ namespace ft {
             return data_[size_ - 1];
         }
 
-        value_type *data()
+        pointer data()
         {
             return data_;
         }
 
-        const value_type *data() const
+        const_pointer data() const
         {
             return data_;
         }
@@ -402,13 +366,14 @@ namespace ft {
 
         iterator insert(iterator pos, const_reference value) {
 
-            size_type idx = pos - begin();
-            
+            difference_type idx = ft::distance(begin(), pos);
+            assert(idx >= 0);
+
             if ((size_ +  1) >= capacity_) {
                 realloc(capacity_ * 2);
             }
 
-            for (size_type i = size_; i > idx; i--)
+            for (size_type i = size_; i > static_cast<size_type>(idx); --i)
             {
                 alloc_.construct(&data_[i], data_[i - 1]);
             }
@@ -420,18 +385,19 @@ namespace ft {
         }
 
         iterator insert(iterator pos, size_type n, const_reference value) {
-            size_type idx = pos - begin();
-            
-            while ((size_ +  n) >= capacity_) {
-                realloc(capacity_ * 2);
+            difference_type idx = ft::distance(begin(), pos);
+            assert(idx >= 0);
+
+            if ((size_ +  n) >= capacity_) {
+                realloc(size_ + n + 1);
             }
 
-            for (size_type i = size_ + n - 1; i > idx; i--)
+            for (size_type i = (size_ + n - 1); i > static_cast<size_type>(idx); --i)
             {
                 alloc_.construct(&data_[i], data_[i - n]);
             }
 
-            for (size_type i = idx; i < idx + n; i++)
+            for (size_type i = idx; i < (static_cast<size_type>(idx) + n); i++)
             {    
                 alloc_.construct(&data_[i], value);
             }
@@ -449,15 +415,19 @@ namespace ft {
                 return pos;
             }
 
-            typename InputIter::difference_type n = last - first;
+            typedef iterator_traits<InputIter> Traits;
+
+            typename Traits::difference_type n = ft::distance(first, last);
+            assert(n >= 0);
             
-            size_type idx = pos - begin();
-            
-            while ((size_ +  n) >= capacity_) {
-                realloc(capacity_ * 2);
+            difference_type idx = ft::distance(begin(), pos);
+            assert(idx >= 0);
+
+            if ((size_ +  n) >= capacity_) {
+                realloc(size_ + n + 1);
             }
 
-            for (size_type i = size_ + n - 1; i > idx; i--)
+            for (size_type i = (size_ + n - 1); i > static_cast<size_type>(idx); --i)
             {
                 alloc_.construct(&data_[i], data_[i - n]);
             }
