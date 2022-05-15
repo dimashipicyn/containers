@@ -76,7 +76,47 @@ namespace ft {
             }
             return dist;
         }
-    }
+    };
+
+    template <class T>
+    struct is_integral {
+        static const bool value = false;
+    };
+
+    template <>
+    struct is_integral<bool> {
+        static const bool value = true;
+    };
+
+    template <>
+    struct is_integral<char> {
+        static const bool value = true;
+    };
+
+    template <>
+    struct is_integral<short> {
+        static const bool value = true;
+    };
+
+    template <>
+    struct is_integral<int> {
+        static const bool value = true;
+    };
+
+    template <>
+    struct is_integral<long> {
+        static const bool value = true;
+    };
+
+    template <>
+    struct is_integral<long long> {
+        static const bool value = true;
+    };
+
+    template <class T>
+    const T& max(const T& v1, const T& v2) {
+        return (v1 > v2) ? v1 : v2;
+    };
 
 } // ft
 

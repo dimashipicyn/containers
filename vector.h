@@ -150,8 +150,8 @@ namespace ft {
         explicit vector(const allocator_type &alloc = allocator_type())
             : data_(nullptr), size_(0), capacity_(0), alloc_(alloc)
         {
-            data_ = alloc_.allocate(1);
-            capacity_ = 1;
+            // data_ = alloc_.allocate(1);
+            // capacity_ = 1;
         }
 
         explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
@@ -170,9 +170,9 @@ namespace ft {
         vector(const vector &v)
             : data_(nullptr), size_(0), capacity_(0), alloc_(v.alloc_)
         {
-            data_ = alloc_.allocate(v.size() + 1);
+            data_ = alloc_.allocate(v.capacity());
             size_ = v.size();
-            capacity_ = v.size() + 1;
+            capacity_ = v.capacity();
 
            for (size_type i = 0; i < v.size(); i++)
            {
@@ -182,7 +182,7 @@ namespace ft {
         }
 
         // template<class InputIter>
-        // vector(InputIter first, InputIter last, const allocator_type& alloc = allocator_type(), typename enable_if<true, typename iterator_traits<InputIter>::iterator_category>::type = 0)
+        // vector(InputIter first, InputIter last, const allocator_type& alloc = allocator_type())
         //     : data_(nullptr)
         //     , size_(0)
         //     , capacity_(0)
@@ -331,7 +331,7 @@ namespace ft {
         {
             if (size_ >= capacity_)
             {
-                realloc(capacity_ * 2);
+                realloc(ft::max(capacity_ * 2, 1UL));
             }
             alloc_.construct(&data_[size_++], value);
         }
@@ -370,7 +370,7 @@ namespace ft {
             assert(idx >= 0);
 
             if ((size_ +  1) >= capacity_) {
-                realloc(capacity_ * 2);
+                realloc(ft::max(capacity_ * 2, 1UL));
             }
 
             for (size_type i = size_; i > static_cast<size_type>(idx); --i)

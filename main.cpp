@@ -3,18 +3,19 @@
 
 #include "gtest/gtest.h"
 
+//#define ft std
+
 TEST(ft_vector_test, testDefConstr)
 {
     ft::vector<int> v;
     ASSERT_TRUE(v.size() == 0);
-    ASSERT_TRUE(v.capacity() == 1);
+    ASSERT_TRUE(v.capacity() == 0);
 }
 
 TEST(ft_vector_test, testConstrElemN)
 {
     ft::vector<int> v(5, 443);
     ASSERT_TRUE(v.size() == 5);
-    ASSERT_TRUE(v.capacity() == 6);
     ASSERT_TRUE(v.at(0) == 443);
     ASSERT_TRUE(v.at(1) == 443);
     ASSERT_TRUE(v.at(2) == 443);
@@ -28,7 +29,6 @@ TEST(ft_vector_test, testConstrCopy)
     ft::vector<int> v(vt);
 
     ASSERT_TRUE(v.size() == 5);
-    ASSERT_TRUE(v.capacity() == 6);
     ASSERT_TRUE(v.at(0) == 443);
     ASSERT_TRUE(v.at(1) == 443);
     ASSERT_TRUE(v.at(2) == 443);
@@ -131,13 +131,13 @@ TEST(ft_vector_test, testShrinkToFit)
 
     v.reserve(12);
 
+    ASSERT_TRUE(v.capacity() == 12);
     // set some initial content:
     for (int i = 0; i < 5; i++)
         v.push_back(i);
     
-    ASSERT_TRUE(v.capacity() == 12);
     v.shrink_to_fit();
-    ASSERT_TRUE(v.capacity() == 6);
+    ASSERT_TRUE(v.capacity() < 12);
 }
 
 TEST(ft_vector_test, testFrontBack)
@@ -145,6 +145,7 @@ TEST(ft_vector_test, testFrontBack)
     ft::vector<int> v;
 
     v.push_back(111);
+    v.push_back(12345);
     v.push_back(222);
 
     ASSERT_TRUE(v.front() == 111);
@@ -628,6 +629,29 @@ TEST(ft_vector_test, TestKek) {
     ASSERT_TRUE(vv[0] == "hello");
     ASSERT_TRUE(vv[1] == "world");
     ASSERT_TRUE(vv[2] == "tester");
+}
+
+TEST(ft_vector_test, test_is_integral) {
+    ASSERT_TRUE(ft::is_integral<int>::value == true);
+    ASSERT_TRUE(ft::is_integral<float>::value == false);
+}
+
+TEST(ft_vector_test, testIteratorConstr) {
+    ft::vector<int> v;
+
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    v.push_back(4);
+    v.push_back(5);
+
+    // ft::vector<int> vw(v.begin(), v.end());
+
+    // ASSERT_TRUE(vw[0] == 1);
+    // ASSERT_TRUE(vw[0] == 2);
+    // ASSERT_TRUE(vw[0] == 3);
+    // ASSERT_TRUE(vw[0] == 4);
+    // ASSERT_TRUE(vw[0] == 5);
 }
 
 int main(int argc, char** argv)
