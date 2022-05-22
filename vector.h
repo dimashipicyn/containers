@@ -150,8 +150,6 @@ namespace ft {
         explicit vector(const allocator_type &alloc = allocator_type())
             : data_(nullptr), size_(0), capacity_(0), alloc_(alloc)
         {
-            // data_ = alloc_.allocate(1);
-            // capacity_ = 1;
         }
 
         explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
@@ -181,25 +179,25 @@ namespace ft {
             
         }
 
-        // template<class InputIter>
-        // vector(InputIter first, InputIter last, const allocator_type& alloc = allocator_type())
-        //     : data_(nullptr)
-        //     , size_(0)
-        //     , capacity_(0)
-        //     , alloc_(alloc)
-        // {
-        //     typedef iterator_traits<InputIter> Traits;
+        template<class InputIter>
+        vector(InputIter first, InputIter last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIter>::value, InputIter>::type* = nullptr)
+            : data_(nullptr)
+            , size_(0)
+            , capacity_(0)
+            , alloc_(alloc)
+        {
+            typedef iterator_traits<InputIter> Traits;
 
-        //     typename Traits::difference_type n = ft::distance(first, last);
-        //     assert(n >= 0);
+            typename Traits::difference_type n = ft::distance(first, last);
+            assert(n >= 0);
 
-        //     realloc(n + 1);
-        //     for (size_t i = 0; i < n; i++, first++)
-        //     {
-        //         alloc_.construct(&data_[i], *first);
-        //     }
-        //     size_ = n;
-        // }
+            realloc(n + 1);
+            for (size_t i = 0; i < static_cast<size_t>(n); i++, first++)
+            {
+                alloc_.construct(&data_[i], *first);
+            }
+            size_ = n;
+        }
 
         vector& operator=(vector v)
         {

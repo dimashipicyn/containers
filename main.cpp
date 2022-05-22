@@ -1,4 +1,5 @@
 #include "vector.h"
+#include "stack.h"
 #include <iostream>
 
 #include "gtest/gtest.h"
@@ -645,14 +646,35 @@ TEST(ft_vector_test, testIteratorConstr) {
     v.push_back(4);
     v.push_back(5);
 
-    // ft::vector<int> vw(v.begin(), v.end());
+    ft::vector<int> vw(v.begin(), v.end());
 
-    // ASSERT_TRUE(vw[0] == 1);
-    // ASSERT_TRUE(vw[0] == 2);
-    // ASSERT_TRUE(vw[0] == 3);
-    // ASSERT_TRUE(vw[0] == 4);
-    // ASSERT_TRUE(vw[0] == 5);
+    ASSERT_TRUE(vw[0] == 1);
+    ASSERT_TRUE(vw[1] == 2);
+    ASSERT_TRUE(vw[2] == 3);
+    ASSERT_TRUE(vw[3] == 4);
+    ASSERT_TRUE(vw[4] == 5);
 }
+
+TEST(ft_stack_test, testConstruct) {
+    ft::stack<int> v;
+
+    v.push(1);
+    v.push(2);
+    v.push(3);
+    v.push(4);
+    v.push(5);
+
+    ft::stack<int> v1;
+
+    v.push(1);
+    v.push(2);
+    v.push(3);
+    v.push(4);
+    v.push(5);
+
+    //ASSERT_TRUE(v == v1);
+}
+
 
 int main(int argc, char** argv)
 {
