@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)
 project(test)
 
 set (CMAKE_CXX_STANDARD 98)
-set (CMAKE_CXX_FLAGS "-Wall -Wextra -fsanitize=address")
+set (CMAKE_CXX_FLAGS "-Wall -fsanitize=address")
 
 include(FetchContent)
 FetchContent_Declare(

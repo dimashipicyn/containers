@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <iterator>
+#include <cassert>
 
 namespace ft {
 
@@ -329,7 +330,7 @@ namespace ft {
         {
             if (size_ >= capacity_)
             {
-                realloc(ft::max(capacity_ * 2, 1UL));
+                realloc(ft::max(capacity_ * 2, static_cast<size_type>(1)));
             }
             alloc_.construct(&data_[size_++], value);
         }
@@ -368,10 +369,10 @@ namespace ft {
             assert(idx >= 0);
 
             if ((size_ +  1) >= capacity_) {
-                realloc(ft::max(capacity_ * 2, 1UL));
+                realloc(ft::max(capacity_ * 2, static_cast<size_type>(1)));
             }
 
-            for (size_type i = size_; i > static_cast<size_type>(idx); --i)
+            for (size_type i = size_; i > static_cast<size_type>(idx); i--)
             {
                 alloc_.construct(&data_[i], data_[i - 1]);
             }
@@ -390,17 +391,15 @@ namespace ft {
                 realloc(size_ + n + 1);
             }
 
-            for (size_type i = (size_ + n - 1); i > static_cast<size_type>(idx); --i)
+            for (int64_t i = (static_cast<int64_t>(size_) - 1); i >= idx; i--)
             {
-                alloc_.construct(&data_[i], data_[i - n]);
+                alloc_.construct(&data_[i + n], data_[i]);
             }
 
-            for (size_type i = idx; i < (static_cast<size_type>(idx) + n); i++)
+            for (int64_t i = idx; i < (idx + n); i++)
             {    
                 alloc_.construct(&data_[i], value);
             }
-            
-            alloc_.construct(&data_[idx], value);
             
             size_ += n;
 
@@ -425,9 +424,9 @@ namespace ft {
                 realloc(size_ + n + 1);
             }
 
-            for (size_type i = (size_ + n - 1); i > static_cast<size_type>(idx); --i)
+            for (int64_t i = (static_cast<int64_t>(size_) - 1); i >= idx; i--)
             {
-                alloc_.construct(&data_[i], data_[i - n]);
+                alloc_.construct(&data_[i + n], data_[i]);
             }
             
             for (size_type i = idx; first != last; i++, first++) {
