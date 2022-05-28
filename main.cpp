@@ -1,5 +1,6 @@
 #include "vector.h"
 #include "stack.h"
+#include "btree.h"
 #include <iostream>
 
 #include "gtest/gtest.h"
@@ -675,6 +676,17 @@ TEST(ft_stack_test, testConstruct) {
     //ASSERT_TRUE(v == v1);
 }
 
+TEST(ft_btree_test, test) {
+    Btree<int> tree;
+
+    tree.insert(5);
+    tree.insert(3);
+    tree.insert(7);
+    tree.insert(4);
+    tree.insert(6);
+
+    tree.prefix();
+}
 
 int main(int argc, char** argv)
 {
