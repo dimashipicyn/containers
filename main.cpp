@@ -684,7 +684,12 @@ TEST(ft_btree_test, test) {
     tree.insert(7);
     tree.insert(4);
     tree.insert(6);
-
+    
+    ASSERT_TRUE(tree.find(4) != nullptr);
+    ASSERT_TRUE(tree.find(4)->value == 4);
+    
+    ASSERT_TRUE(tree.find(6) != nullptr);
+    ASSERT_TRUE(tree.find(6)->value == 6);
     tree.prefix();
 }
 
